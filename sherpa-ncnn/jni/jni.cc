@@ -16,7 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/**
+ * Notice:The file has been modified by Tiny Wang to satisfy his need.
+ */
 // TODO(fangjun): Add documentation to functions/methods in this file
 // and also show how to use them with kotlin, possibly with java.
 
@@ -95,7 +97,7 @@ static FeatureExtractorConfig GetFeatureExtractorConfig(JNIEnv *env,
   jclass cls = env->GetObjectClass(config);
 
   jfieldID fid = env->GetFieldID(
-      cls, "featConfig", "Lcom/k2fsa/sherpa/ncnn/FeatureExtractorConfig;");
+      cls, "featConfig", "Lcom/android/tinywangsherpaNcnn/FeatureExtractorConfig;");
   jobject feat_config = env->GetObjectField(config, fid);
   jclass feat_config_cls = env->GetObjectClass(feat_config);
 
@@ -114,7 +116,7 @@ static ModelConfig GetModelConfig(JNIEnv *env, jobject config) {
   jclass cls = env->GetObjectClass(config);
 
   jfieldID fid = env->GetFieldID(cls, "modelConfig",
-                                 "Lcom/k2fsa/sherpa/ncnn/ModelConfig;");
+                                 "Lcom/android/tinywangsherpaNcnn/ModelConfig;");
   jobject model_config = env->GetObjectField(config, fid);
   jclass model_config_cls = env->GetObjectClass(model_config);
 
@@ -179,7 +181,7 @@ static DecoderConfig GetDecoderConfig(JNIEnv *env, jobject config) {
   jclass cls = env->GetObjectClass(config);
 
   jfieldID fid = env->GetFieldID(cls, "decoderConfig",
-                                 "Lcom/k2fsa/sherpa/ncnn/DecoderConfig;");
+                                 "Lcom/android/tinywangsherpaNcnn/DecoderConfig;");
   jobject decoder_config = env->GetObjectField(config, fid);
   jclass decoder_config_cls = env->GetObjectClass(decoder_config);
 
@@ -198,21 +200,21 @@ static DecoderConfig GetDecoderConfig(JNIEnv *env, jobject config) {
   decoder_config.enable_endpoint = env->GetBooleanField(config, fid);
 
   fid = env->GetFieldID(cls, "endpointConfig",
-                        "Lcom/k2fsa/sherpa/ncnn/EndpointConfig;");
+                        "Lcom/android/tinywangsherpaNcnn/EndpointConfig;");
   jobject endpoint_config = env->GetObjectField(config, fid);
   jclass endpoint_config_cls = env->GetObjectClass(endpoint_config);
 
   fid = env->GetFieldID(endpoint_config_cls, "rule1",
-                        "Lcom/k2fsa/sherpa/ncnn/EndpointRule;");
+                        "Lcom/android/tinywangsherpaNcnn/EndpointRule;");
   jobject rule1 = env->GetObjectField(endpoint_config, fid);
   jclass rule_class = env->GetObjectClass(rule1);
 
   fid = env->GetFieldID(endpoint_config_cls, "rule2",
-                        "Lcom/k2fsa/sherpa/ncnn/EndpointRule;");
+                        "Lcom/android/tinywangsherpaNcnn/EndpointRule;");
   jobject rule2 = env->GetObjectField(endpoint_config, fid);
 
   fid = env->GetFieldID(endpoint_config_cls, "rule3",
-                        "Lcom/k2fsa/sherpa/ncnn/EndpointRule;");
+                        "Lcom/android/tinywangsherpaNcnn/EndpointRule;");
   jobject rule3 = env->GetObjectField(endpoint_config, fid);
 
   fid = env->GetFieldID(rule_class, "mustContainNonSilence", "Z");
@@ -282,7 +284,7 @@ static RecognizerConfig ParseConfig(JNIEnv *env, jobject _config) {
 }  // namespace sherpa_ncnn
 
 SHERPA_EXTERN_C
-JNIEXPORT jlong JNICALL Java_com_k2fsa_sherpa_ncnn_SherpaNcnn_newFromFile(
+JNIEXPORT jlong JNICALL Java_com_android_tinywangsherpaNcnn_SherpaNcnn_newFromFile(
     JNIEnv *env, jobject /*obj*/, jobject _config) {
   sherpa_ncnn::RecognizerConfig config = sherpa_ncnn::ParseConfig(env, _config);
   NCNN_LOGE("%s", config.ToString().c_str());
@@ -292,7 +294,7 @@ JNIEXPORT jlong JNICALL Java_com_k2fsa_sherpa_ncnn_SherpaNcnn_newFromFile(
 }
 
 SHERPA_EXTERN_C
-JNIEXPORT jlong JNICALL Java_com_k2fsa_sherpa_ncnn_SherpaNcnn_newFromAsset(
+JNIEXPORT jlong JNICALL Java_com_android_tinywangsherpaNcnn_SherpaNcnn_newFromAsset(
     JNIEnv *env, jobject /*obj*/, jobject asset_manager, jobject _config) {
 #if __ANDROID_API__ >= 9
   AAssetManager *mgr = AAssetManager_fromJava(env, asset_manager);
@@ -313,41 +315,41 @@ JNIEXPORT jlong JNICALL Java_com_k2fsa_sherpa_ncnn_SherpaNcnn_newFromAsset(
 }
 
 SHERPA_EXTERN_C
-JNIEXPORT void JNICALL Java_com_k2fsa_sherpa_ncnn_SherpaNcnn_delete(
+JNIEXPORT void JNICALL Java_com_android_tinywangsherpaNcnn_SherpaNcnn_delete(
     JNIEnv *env, jobject /*obj*/, jlong ptr) {
   delete reinterpret_cast<sherpa_ncnn::SherpaNcnn *>(ptr);
 }
 
 SHERPA_EXTERN_C
-JNIEXPORT void JNICALL Java_com_k2fsa_sherpa_ncnn_SherpaNcnn_decode(
+JNIEXPORT void JNICALL Java_com_android_tinywangsherpaNcnn_SherpaNcnn_decode(
     JNIEnv *env, jobject /*obj*/, jlong ptr) {
   auto model = reinterpret_cast<sherpa_ncnn::SherpaNcnn *>(ptr);
   model->DecodeStream();
 }
 
 SHERPA_EXTERN_C
-JNIEXPORT void JNICALL Java_com_k2fsa_sherpa_ncnn_SherpaNcnn_reset(
+JNIEXPORT void JNICALL Java_com_android_tinywangsherpaNcnn_SherpaNcnn_reset(
     JNIEnv *env, jobject /*obj*/, jlong ptr, jboolean recreate) {
   auto model = reinterpret_cast<sherpa_ncnn::SherpaNcnn *>(ptr);
   model->Reset(recreate);
 }
 
 SHERPA_EXTERN_C
-JNIEXPORT bool JNICALL Java_com_k2fsa_sherpa_ncnn_SherpaNcnn_isEndpoint(
+JNIEXPORT bool JNICALL Java_com_android_tinywangsherpaNcnn_SherpaNcnn_isEndpoint(
     JNIEnv *env, jobject /*obj*/, jlong ptr) {
   auto model = reinterpret_cast<sherpa_ncnn::SherpaNcnn *>(ptr);
   return model->IsEndpoint();
 }
 
 SHERPA_EXTERN_C
-JNIEXPORT bool JNICALL Java_com_k2fsa_sherpa_ncnn_SherpaNcnn_isReady(
+JNIEXPORT bool JNICALL Java_com_android_tinywangsherpaNcnn_SherpaNcnn_isReady(
     JNIEnv *env, jobject /*obj*/, jlong ptr) {
   auto model = reinterpret_cast<sherpa_ncnn::SherpaNcnn *>(ptr);
   return model->IsReady();
 }
 
 SHERPA_EXTERN_C
-JNIEXPORT void JNICALL Java_com_k2fsa_sherpa_ncnn_SherpaNcnn_acceptWaveform(
+JNIEXPORT void JNICALL Java_com_android_tinywangsherpaNcnn_SherpaNcnn_acceptWaveform(
     JNIEnv *env, jobject /*obj*/, jlong ptr, jfloatArray samples,
     jfloat sample_rate) {
   auto model = reinterpret_cast<sherpa_ncnn::SherpaNcnn *>(ptr);
@@ -361,13 +363,13 @@ JNIEXPORT void JNICALL Java_com_k2fsa_sherpa_ncnn_SherpaNcnn_acceptWaveform(
 }
 
 SHERPA_EXTERN_C
-JNIEXPORT void JNICALL Java_com_k2fsa_sherpa_ncnn_SherpaNcnn_inputFinished(
+JNIEXPORT void JNICALL Java_com_android_tinywangsherpaNcnn_SherpaNcnn_inputFinished(
     JNIEnv *env, jobject /*obj*/, jlong ptr) {
   reinterpret_cast<sherpa_ncnn::SherpaNcnn *>(ptr)->InputFinished();
 }
 
 SHERPA_EXTERN_C
-JNIEXPORT jstring JNICALL Java_com_k2fsa_sherpa_ncnn_SherpaNcnn_getText(
+JNIEXPORT jstring JNICALL Java_com_android_tinywangsherpaNcnn_SherpaNcnn_getText(
     JNIEnv *env, jobject /*obj*/, jlong ptr) {
   // see
   // https://stackoverflow.com/questions/11621449/send-c-string-to-java-via-jni
@@ -377,7 +379,7 @@ JNIEXPORT jstring JNICALL Java_com_k2fsa_sherpa_ncnn_SherpaNcnn_getText(
 
 SHERPA_EXTERN_C
 JNIEXPORT jfloatArray JNICALL
-Java_com_k2fsa_sherpa_ncnn_WaveReader_00024Companion_readWave(
+Java_com_android_tinywangsherpaNcnn_WaveReader_00024Companion_readWave(
     JNIEnv *env, jclass /*cls*/, jobject asset_manager, jstring filename,
     jfloat expected_sample_rate) {
   const char *p_filename = env->GetStringUTFChars(filename, nullptr);
